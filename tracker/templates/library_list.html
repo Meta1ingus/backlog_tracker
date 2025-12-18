@@ -14,12 +14,14 @@
   <tr>
     <td>{{ lib.edition.game.title }}</td>
     <td>{{ lib.platform.name }}</td>
-    <td>{{ lib.status.label }}</td>
+    <td>
+  <span class="badge {{ lib.status.badge_class }}">{{ lib.status.label }}</span>
+</td>
     <td>{{ lib.priority }}</td>
     <td>
-      <a href="{% url 'library_edit' lib.id %}">Edit</a> |
-      <a href="{% url 'library_delete' lib.id %}">Delete</a>
-    </td>
+  <a href="{% url 'library_edit' lib.id %}" class="btn btn-sm btn-warning">Edit</a>
+  <a href="{% url 'library_delete' lib.id %}" class="btn btn-sm btn-danger">Delete</a>
+</td>
   </tr>
   {% endfor %}
 </table>

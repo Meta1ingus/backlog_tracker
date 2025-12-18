@@ -38,6 +38,18 @@ class Status(models.Model):
     def __str__(self):
         return self.label
 
+    def badge_class(self):
+        mapping = {
+            "wishlist": "badge-wishlist",
+            "backlog": "badge-backlog",
+            "paused": "badge-paused",
+            "in_progress": "badge-in_progress",
+            "completed": "badge-completed",
+            "shelved": "badge-shelved",
+            "abandoned": "badge-abandoned",
+        }
+        return mapping.get(self.key, "badge-secondary")
+
 class Library(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libraries")
     edition = models.ForeignKey(Edition, on_delete=models.CASCADE)
