@@ -1,0 +1,68 @@
+/* General page styling */
+body {
+  background-color: #f8f9fa; /* light gray background */
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Headings */
+h1, h2, h3 {
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+/* Navbar tweaks */
+.navbar {
+  border-radius: 6px;
+}
+.navbar-brand {
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+/* Table styling */
+.table {
+  background-color: #fff;
+  border-radius: 6px;
+  overflow: hidden;
+}
+.table th {
+  text-transform: uppercase;
+  font-size: 0.9rem;
+}
+.table td {
+  vertical-align: middle;
+}
+
+/* Buttons */
+.btn {
+  margin-right: 5px;
+}
+.btn-primary {
+  background-color: #0069d9;
+}
+.btn-warning {
+  color: #212529;
+}
+
+/* Form styling */
+form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 6px;
+}
+form button {
+  margin-top: 10px;
+}
+
+/* Custom badges for statuses */
+.badge {
+  font-size: 0.85rem;
+  padding: 0.5em 0.75em;
+}
+.badge-wishlist { background-color: #6c757d; }
+.badge-backlog { background-color: #007bff; }
+.badge-in_progress { background-color: #ffc107; color: #212529; }
+.badge-completed { background-color: #28a745; }
+.badge-paused { background-color: #17a2b8; }
+.badge-shelved { background-color: #343a40; }
+.badge-abandoned { background-color: #dc3545; }

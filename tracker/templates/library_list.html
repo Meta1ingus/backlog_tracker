@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>My Backlog</h1>
+<a href="{% url 'library_add' %}" class="btn btn-primary">Add New Entry</a>
+<table class="table">
+  <tr>
+    <th>Game</th>
+    <th>Platform</th>
+    <th>Status</th>
+    <th>Priority</th>
+    <th>Actions</th>
+  </tr>
+  {% for lib in libraries %}
+  <tr>
+    <td>{{ lib.edition.game.title }}</td>
+    <td>{{ lib.platform.name }}</td>
+    <td>{{ lib.status.label }}</td>
+    <td>{{ lib.priority }}</td>
+    <td>
+      <a href="{% url 'library_edit' lib.id %}">Edit</a> |
+      <a href="{% url 'library_delete' lib.id %}">Delete</a>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endblock %}
