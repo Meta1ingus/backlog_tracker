@@ -2,14 +2,133 @@
 {% block content %}
 <h1>My Backlog</h1>
 <a href="{% url 'library_add' %}" class="btn btn-primary">Add New Entry</a>
+<form method="get" class="mb-3 d-flex gap-3">
+
+  <!-- Platform filter -->
+  <select name="platform" class="form-select" style="width: 200px;">
+    <option value="">All Platforms</option>
+    {% for p in platforms %}
+      <option value="{{ p.id }}" {% if selected_platform == p.id|stringformat:"s" %}selected{% endif %}>
+        {{ p.name }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <!-- Status filter -->
+  <select name="status" class="form-select" style="width: 200px;">
+    <option value="">All Statuses</option>
+    {% for s in statuses %}
+      <option value="{{ s.id }}" {% if selected_status == s.id|stringformat:"s" %}selected{% endif %}>
+        {{ s.label }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <!-- Priority filter -->
+  <select name="priority" class="form-select" style="width: 150px;">
+    <option value="">All Priorities</option>
+    {% for p in priorities %}
+      <option value="{{ p }}" {% if selected_priority == p|stringformat:"s" %}selected{% endif %}>
+        {{ p }}
+      </option>
+    {% endfor %}
+  </select>
+
+  <input type="text"
+         name="search"
+         class="form-control"
+         placeholder="Search games..."
+         value="{{ request.GET.search }}"
+         style="width: 250px;">
+
+  <button type="submit" class="btn btn-primary">Filter</button>
+
+</form>
+
+<form method="get" style="display:inline-block; margin-bottom:10px;">
+
+    <!-- Preserve search -->
+    {% if request.GET.search %}
+        <input type="hidden" name="search" value="{{ request.GET.search }}">
+    {% endif %}
+
+    <!-- Preserve filters -->
+    {% if selected_platform %}
+        <input type="hidden" name="platform" value="{{ selected_platform }}">
+    {% endif %}
+    {% if selected_status %}
+        <input type="hidden" name="status" value="{{ selected_status }}">
+    {% endif %}
+    {% if selected_priority %}
+        <input type="hidden" name="priority" value="{{ selected_priority }}">
+    {% endif %}
+
+    <!-- Preserve sorting -->
+    {% if current_sort %}
+        <input type="hidden" name="sort" value="{{ current_sort }}">
+    {% endif %}
+
+    <label for="page_size">Show:</label>
+    <select name="page_size" id="page_size" onchange="this.form.submit()">
+        <option value="10"  {% if request.GET.page_size == '10' %}selected{% endif %}>10</option>
+        <option value="20"  {% if request.GET.page_size == '20' %}selected{% endif %}>20</option>
+        <option value="50"  {% if request.GET.page_size == '50' %}selected{% endif %}>50</option>
+        <option value="100" {% if request.GET.page_size == '100' %}selected{% endif %}>100</option>
+    </select>
+</form>
+
 <table class="table">
   <tr>
-    <th>Game</th>
-    <th>Platform</th>
-    <th>Status</th>
-    <th>Priority</th>
+
+    <!-- Game column -->
+    <th>
+        {% if current_sort == "name" %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=name_desc" style="text-decoration:none; color:inherit;">Game ▲</a>
+        {% elif current_sort == "name_desc" %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=name" style="text-decoration:none; color:inherit;">Game ▼</a>
+        {% else %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=name" style="text-decoration:none; color:inherit;">Game ↕</a>
+        {% endif %}
+    </th>
+
+    <!-- Platform column -->
+    <th>
+        {% if current_sort == "platform" %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=platform_desc" style="text-decoration:none; color:inherit;">Platform ▲</a>
+        {% elif current_sort == "platform_desc" %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=platform" style="text-decoration:none; color:inherit;">Platform ▼</a>
+        {% else %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=platform" style="text-decoration:none; color:inherit;">Platform ↕</a>
+        {% endif %}
+    </th>
+
+    <!-- Status column -->
+    <th>
+        {% if current_sort == "status" %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=status_desc" style="text-decoration:none; color:inherit;">Status ▲</a>
+        {% elif current_sort == "status_desc" %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=status" style="text-decoration:none; color:inherit;">Status ▼</a>
+        {% else %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=status" style="text-decoration:none; color:inherit;">Status ↕</a>
+        {% endif %}
+    </th>
+
+    <!-- Priority column -->
+    <th>
+        {% if current_sort == "priority" %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=priority_desc" style="text-decoration:none; color:inherit;">Priority ▲</a>
+        {% elif current_sort == "priority_desc" %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=priority" style="text-decoration:none; color:inherit;">Priority ▼</a>
+        {% else %}
+            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=priority" style="text-decoration:none; color:inherit;">Priority ↕</a>
+        {% endif %}
+    </th>
+
+    <!-- Actions column (unchanged) -->
     <th>Actions</th>
-  </tr>
+
+</tr>
+
   {% for lib in libraries %}
   <tr>
     <td>{{ lib.edition.game.title }}</td>
@@ -25,4 +144,32 @@
   </tr>
   {% endfor %}
 </table>
+
+{% if is_paginated %}
+<div class="pagination-container" style="margin-top: 20px;">
+
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{{ preserved_querystring }}{% if request.GET.page_size %}&page_size={{ request.GET.page_size }}{% endif %}">
+            Previous
+        </a>
+    {% endif %}
+
+    {% for num in paginator.page_range %}
+        {% if num == page_obj.number %}
+            <strong>{{ num }}</strong>
+        {% else %}
+            <a href="?page={{ num }}{{ preserved_querystring }}{% if request.GET.page_size %}&page_size={{ request.GET.page_size }}{% endif %}">
+                {{ num }}
+            </a>
+        {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{{ preserved_querystring }}{% if request.GET.page_size %}&page_size={{ request.GET.page_size }}{% endif %}">
+            Next
+        </a>
+    {% endif %}
+
+</div>
+{% endif %}
 {% endblock %}

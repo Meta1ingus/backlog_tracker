@@ -34,10 +34,12 @@ class Edition(models.Model):
 class Status(models.Model):
     key = models.CharField(max_length=50, unique=True)
     label = models.CharField(max_length=100)
+    order = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.label
 
+    @property
     def badge_class(self):
         mapping = {
             "wishlist": "badge-wishlist",
@@ -47,9 +49,10 @@ class Status(models.Model):
             "completed": "badge-completed",
             "shelved": "badge-shelved",
             "abandoned": "badge-abandoned",
+            "not_started": "badge-backlog",
         }
         return mapping.get(self.key, "badge-secondary")
-
+    
 class Library(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libraries")
     edition = models.ForeignKey(Edition, on_delete=models.CASCADE)
