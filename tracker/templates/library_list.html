@@ -74,6 +74,7 @@
         <option value="20"  {% if request.GET.page_size == '20' %}selected{% endif %}>20</option>
         <option value="50"  {% if request.GET.page_size == '50' %}selected{% endif %}>50</option>
         <option value="100" {% if request.GET.page_size == '100' %}selected{% endif %}>100</option>
+        <option value="9999" {% if request.GET.page_size == '9999' %}selected{% endif %}>All</option>
     </select>
 </form>
 
@@ -83,44 +84,44 @@
     <!-- Game column -->
     <th>
         {% if current_sort == "name" %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=name_desc" style="text-decoration:none; color:inherit;">Game ▲</a>
+            <a href="?{{ query_params }}&sort=name_desc" style="text-decoration:none; color:inherit;">Game ▲</a>
         {% elif current_sort == "name_desc" %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=name" style="text-decoration:none; color:inherit;">Game ▼</a>
+            <a href="?{{ query_params }}&sort=name" style="text-decoration:none; color:inherit;">Game ▼</a>
         {% else %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=name" style="text-decoration:none; color:inherit;">Game ↕</a>
+            <a href="?{{ query_params }}&sort=name" style="text-decoration:none; color:inherit;">Game ↕</a>
         {% endif %}
     </th>
 
     <!-- Platform column -->
     <th>
         {% if current_sort == "platform" %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=platform_desc" style="text-decoration:none; color:inherit;">Platform ▲</a>
+            <a href="?{{ query_params }}&sort=platform_desc" style="text-decoration:none; color:inherit;">Platform ▲</a>
         {% elif current_sort == "platform_desc" %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=platform" style="text-decoration:none; color:inherit;">Platform ▼</a>
+            <a href="?{{ query_params }}&sort=platform" style="text-decoration:none; color:inherit;">Platform ▼</a>
         {% else %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=platform" style="text-decoration:none; color:inherit;">Platform ↕</a>
+            <a href="?{{ query_params }}&sort=platform" style="text-decoration:none; color:inherit;">Platform ↕</a>
         {% endif %}
     </th>
 
     <!-- Status column -->
     <th>
         {% if current_sort == "status" %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=status_desc" style="text-decoration:none; color:inherit;">Status ▲</a>
+            <a href="?{{ query_params }}&sort=status_desc" style="text-decoration:none; color:inherit;">Status ▲</a>
         {% elif current_sort == "status_desc" %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=status" style="text-decoration:none; color:inherit;">Status ▼</a>
+            <a href="?{{ query_params }}&sort=status" style="text-decoration:none; color:inherit;">Status ▼</a>
         {% else %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=status" style="text-decoration:none; color:inherit;">Status ↕</a>
+            <a href="?{{ query_params }}&sort=status" style="text-decoration:none; color:inherit;">Status ↕</a>
         {% endif %}
     </th>
 
     <!-- Priority column -->
     <th>
         {% if current_sort == "priority" %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=priority_desc" style="text-decoration:none; color:inherit;">Priority ▲</a>
+            <a href="?{{ query_params }}&sort=priority_desc" style="text-decoration:none; color:inherit;">Priority ▲</a>
         {% elif current_sort == "priority_desc" %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=priority" style="text-decoration:none; color:inherit;">Priority ▼</a>
+            <a href="?{{ query_params }}&sort=priority" style="text-decoration:none; color:inherit;">Priority ▼</a>
         {% else %}
-            <a href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if selected_platform %}platform={{ selected_platform }}&{% endif %}{% if selected_status %}status={{ selected_status }}&{% endif %}{% if selected_priority %}priority={{ selected_priority }}&{% endif %}sort=priority" style="text-decoration:none; color:inherit;">Priority ↕</a>
+            <a href="?{{ query_params }}&sort=priority" style="text-decoration:none; color:inherit;">Priority ↕</a>
         {% endif %}
     </th>
 

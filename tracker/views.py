@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
@@ -99,29 +100,34 @@ class LibraryListView(LoginRequiredMixin, ListView):
 
         return queryset
 
-def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
     # sorting
-    context["current_sort"] = self.request.GET.get("sort", "")
+        context["current_sort"] = self.request.GET.get("sort", "")
 
     # filtering
-    context["platforms"] = Platform.objects.all()
-    context["statuses"] = Status.objects.all()
-    context["priorities"] = range(1, 6)
+        context["platforms"] = Platform.objects.all()
+        context["statuses"] = Status.objects.all()
+        context["priorities"] = range(1, 6)
 
-    context["selected_platform"] = self.request.GET.get("platform", "")
-    context["selected_status"] = self.request.GET.get("status", "")
-    context["selected_priority"] = self.request.GET.get("priority", "")
+        context["selected_platform"] = self.request.GET.get("platform", "")
+        context["selected_status"] = self.request.GET.get("status", "")
+        context["selected_priority"] = self.request.GET.get("priority", "")
+
+    # --- NEW: Build clean querystring for sorting ---
+        params_for_sort = self.request.GET.copy()
+        params_for_sort.pop("sort", None)
+        context["query_params"] = params_for_sort.urlencode()
 
     # --- pagination: preserve querystring ---
-    params = self.request.GET.copy()
-    if "page" in params:
-        params.pop("page")
+        params = self.request.GET.copy()
+        if "page" in params:
+            params.pop("page")
 
-    context["preserved_querystring"] = "&" + params.urlencode() if params else ""
+        context["preserved_querystring"] = "&" + params.urlencode() if params else ""
 
-    return context
+        return context
 
 class LibraryCreateView(LoginRequiredMixin, CreateView):
     model = Library

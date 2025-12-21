@@ -53,6 +53,18 @@ class Status(models.Model):
         }
         return mapping.get(self.key, "badge-secondary")
     
+class Medium(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+class SubscriptionService(models.Model):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+    
 class Library(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="libraries")
     edition = models.ForeignKey(Edition, on_delete=models.CASCADE)
@@ -63,6 +75,8 @@ class Library(models.Model):
     notes = models.TextField(blank=True)
     start_date = models.DateField(null=True, blank=True)
     finish_date = models.DateField(null=True, blank=True)
+    mediums = models.ManyToManyField(Medium, blank=True)
+    subscription_services = models.ManyToManyField(SubscriptionService, blank=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.edition} ({self.status.label})"
