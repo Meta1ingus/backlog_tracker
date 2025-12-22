@@ -54,6 +54,21 @@ form button {
   margin-top: 10px;
 }
 
+/* Form field styling */
+
+.form-section {
+    margin-bottom: 1rem;
+}
+
+.checkbox-group {
+    margin-bottom: 1.5rem;
+}
+
+.checkbox-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+}
+
 /* Custom badges for statuses */
 .badge {
   font-size: 0.85rem;
