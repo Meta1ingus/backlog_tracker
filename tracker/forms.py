@@ -1,5 +1,7 @@
 # forms.py
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import User
 from .models import Library
 
 # Fixed year range: 1980–2030
@@ -46,3 +48,13 @@ class LibraryForm(forms.ModelForm):
             "mediums": "Medium",
             "subscription_services": "Subscription Services",
         }
+
+
+# Registration Form
+
+class RegistrationForm(UserCreationForm):
+    email = forms.EmailField(required=True)
+
+    class Meta:
+        model = User
+        fields = ["username", "email", "password1", "password2"]

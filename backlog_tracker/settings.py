@@ -23,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 import os
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+SECRET_KEY = "9a5@s-@*cww%=249fyki^j$r7a_hf!^np=11=70#ga6j^g5n2e"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     "127.0.0.1",

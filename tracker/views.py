@@ -1,14 +1,37 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from .models import Library, Platform, Status, Game, Edition
-from .forms import LibraryForm
+from django.shortcuts import render, redirect
+from django.contrib.auth import login
 
+from .models import Library, Platform, Status, Game, Edition
+from .forms import LibraryForm, RegistrationForm
+
+
+# Authentication Views
+
+def register(request):
+    if request.user.is_authenticated:
+        return redirect("library_list")
+
+    if request.method == "POST":
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # auto-login
+            return redirect("library_list")
+    else:
+        form = RegistrationForm()
+
+    return render(request, "tracker/register.html", {"form": form})
+
+# Library Views
 
 class LibraryListView(LoginRequiredMixin, ListView):
     model = Library
     template_name = "library_list.html"
     context_object_name = "libraries"
+
     def get_paginate_by(self, queryset):
         page_size = self.request.GET.get("page_size")
         if page_size and page_size.isdigit():
@@ -25,7 +48,6 @@ class LibraryListView(LoginRequiredMixin, ListView):
         selected_mediums = self.request.GET.getlist("medium")
         selected_subservices = self.request.GET.getlist("subservice")
 
-
         if platform:
             queryset = queryset.filter(platform__id=platform)
 
@@ -34,7 +56,7 @@ class LibraryListView(LoginRequiredMixin, ListView):
 
         if priority:
             queryset = queryset.filter(priority=priority)
-        
+
         if selected_mediums:
             queryset = queryset.filter(mediums__id__in=selected_mediums).distinct()
 
@@ -52,70 +74,42 @@ class LibraryListView(LoginRequiredMixin, ListView):
         sort = self.request.GET.get("sort")
 
         if sort == "name":
-            queryset = queryset.order_by(
-                "edition__game__title"
-            )
+            queryset = queryset.order_by("edition__game__title")
 
         elif sort == "name_desc":
-            queryset = queryset.order_by(
-                "-edition__game__title"
-            )
+            queryset = queryset.order_by("-edition__game__title")
 
         elif sort == "platform":
-            queryset = queryset.order_by(
-                "platform__name",
-                "edition__game__title"
-            )
+            queryset = queryset.order_by("platform__name", "edition__game__title")
 
         elif sort == "platform_desc":
-            queryset = queryset.order_by(
-                "-platform__name",
-                "edition__game__title"
-            )
+            queryset = queryset.order_by("-platform__name", "edition__game__title")
 
         elif sort == "status":
-            queryset = queryset.order_by(
-                "status__order",
-                "priority",
-                "edition__game__title"
-            )
+            queryset = queryset.order_by("status__order", "priority", "edition__game__title")
 
         elif sort == "status_desc":
-            queryset = queryset.order_by(
-                "-status__order",
-                "priority",
-                "edition__game__title"
-            )
+            queryset = queryset.order_by("-status__order", "priority", "edition__game__title")
 
         elif sort == "priority":
-            queryset = queryset.order_by(
-                "priority",
-                "edition__game__title"
-            )
+            queryset = queryset.order_by("priority", "edition__game__title")
 
         elif sort == "priority_desc":
-            queryset = queryset.order_by(
-                "-priority",
-                "edition__game__title"
-            )
+            queryset = queryset.order_by("-priority", "edition__game__title")
 
         # --- Default multi-column sort ---
         else:
-            queryset = queryset.order_by(
-                "status__order",
-                "priority",
-                "edition__game__title"
-            )
+            queryset = queryset.order_by("status__order", "priority", "edition__game__title")
 
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-    # sorting
+        # sorting
         context["current_sort"] = self.request.GET.get("sort", "")
 
-    # filtering
+        # filtering
         context["platforms"] = Platform.objects.all()
         context["statuses"] = Status.objects.all()
         context["priorities"] = range(1, 6)
@@ -124,7 +118,7 @@ class LibraryListView(LoginRequiredMixin, ListView):
         context["selected_status"] = self.request.GET.get("status", "")
         context["selected_priority"] = self.request.GET.get("priority", "")
 
-    # --- Medium + Subscription filter data ---
+        # Medium + Subscription filter data
         from .models import Medium, SubscriptionService
         context["mediums"] = Medium.objects.all()
         context["subscription_services"] = SubscriptionService.objects.all()
@@ -132,14 +126,12 @@ class LibraryListView(LoginRequiredMixin, ListView):
         context["selected_mediums"] = self.request.GET.getlist("medium")
         context["selected_subservices"] = self.request.GET.getlist("subservice")
 
-
-
-    # --- Build clean querystring for sorting ---
+        # Build clean querystring for sorting
         params_for_sort = self.request.GET.copy()
         params_for_sort.pop("sort", None)
         context["query_params"] = params_for_sort.urlencode()
 
-    # --- pagination: preserve querystring ---
+        # pagination: preserve querystring
         params = self.request.GET.copy()
         if "page" in params:
             params.pop("page")

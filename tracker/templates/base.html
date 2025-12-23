@@ -11,37 +11,55 @@
 </head>
 <body class="container py-4">
   
-  <!-- Navbar -->
+<!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
   <a class="navbar-brand" href="{% url 'library_list' %}">Backlog Tracker</a>
+
   <div class="collapse navbar-collapse">
     <ul class="navbar-nav ms-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="{% url 'library_add' %}">Add Entry</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/admin/">Admin</a>
-      </li>
 
       {% if user.is_authenticated %}
+        <!-- Add Entry -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'library_add' %}">Add Entry</a>
+        </li>
+
+        <!-- Admin (staff only) -->
+        {% if user.is_staff %}
+        <li class="nav-item">
+          <a class="nav-link" href="/admin/">Admin</a>
+        </li>
+        {% endif %}
+
+        <!-- Welcome text -->
         <li class="nav-item">
           <span class="navbar-text me-3">Welcome, {{ user.username }}</span>
         </li>
+
+        <!-- Logout -->
         <li class="nav-item">
-  <form method="post" action="{% url 'logout' %}" style="display:inline; margin:0; padding:0;">
-    {% csrf_token %}
-    <button type="submit"
-            class="nav-link"
-            style="all: unset; display: inline; background-color: #212529; color: #FFFFFF80; cursor: pointer;">
-      Logout
-    </button>
-  </form>
-</li>
+          <form method="post" action="{% url 'logout' %}" style="display:inline; margin:0; padding:0;">
+            {% csrf_token %}
+            <button type="submit"
+                    class="nav-link"
+                    style="all: unset; display: inline; background-color: #212529; color: #FFFFFF80; cursor: pointer;">
+              Logout
+            </button>
+          </form>
+        </li>
+
       {% else %}
+        <!-- Login -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'login' %}">Login</a>
         </li>
+
+        <!-- Register -->
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'register' %}">Register</a>
+        </li>
       {% endif %}
+
     </ul>
   </div>
 </nav>
