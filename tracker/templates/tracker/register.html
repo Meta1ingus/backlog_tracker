@@ -5,7 +5,7 @@
     <div class="card shadow-sm p-4" style="max-width: 420px; width: 100%;">
 
         <h2 class="text-center mb-3" style="font-weight: 600; font-size: 1.4rem;">
-            Login to Backlogged<span class="brand-micro">.uk</span>
+            Create Your Backlogged<span class="brand-micro">.uk</span> Account
         </h2>
 
         <form method="post" novalidate>
@@ -24,13 +24,13 @@
             {% endfor %}
 
             <button type="submit" class="btn btn-primary w-100 mt-2">
-                Login
+                Register
             </button>
         </form>
 
         <div class="text-center mt-3">
-            <a href="{% url 'register' %}" class="text-decoration-none">
-                Don’t have an account? Register here
+            <a href="{% url 'login' %}" class="text-decoration-none">
+                Already have an account? Login here
             </a>
         </div>
 

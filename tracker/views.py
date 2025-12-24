@@ -1,3 +1,4 @@
+from multiprocessing import context
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
@@ -126,6 +127,15 @@ class LibraryListView(LoginRequiredMixin, ListView):
         context["selected_mediums"] = self.request.GET.getlist("medium")
         context["selected_subservices"] = self.request.GET.getlist("subservice")
 
+        # Count how many filters are active
+        filter_count = 0
+        if context["selected_platform"]: filter_count += 1
+        if context["selected_status"]: filter_count += 1
+        if context["selected_priority"]: filter_count += 1
+        if context["selected_mediums"]: filter_count += 1
+        if context["selected_subservices"]: filter_count += 1
+        context["filter_count"] = filter_count
+
         # Build clean querystring for sorting
         params_for_sort = self.request.GET.copy()
         params_for_sort.pop("sort", None)
@@ -178,10 +188,13 @@ class LibraryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         initial = super().get_initial()
         edition = self.object.edition
 
-        # Pre-fill the form fields
+    # Pre-fill the form fields
         initial["title"] = edition.game.title
         initial["edition_name"] = edition.name
-        initial["year"] = edition.year
+
+    # Extract year from release_date if available
+        if edition.release_date:
+            initial["year"] = edition.release_date.year
 
         return initial
 

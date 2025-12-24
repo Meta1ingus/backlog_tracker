@@ -2,6 +2,7 @@
 body {
   background-color: #f8f9fa; /* light gray background */
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  /* outline: 5px solid red; for debugging purposes */
 }
 
 /* Headings */
@@ -10,38 +11,311 @@ h1, h2, h3 {
   margin-bottom: 20px;
 }
 
-/* Navbar tweaks */
-.navbar {
-  border-radius: 6px;
+.page-title {
+    font-size: 1.35rem;      /* smaller than h1, bigger than h2 */
+    font-weight: 600;        /* semibold to match your brand */
+    color: #343a40;          /* slightly darker for hierarchy */
+    margin-bottom: 1rem;
 }
-.navbar-brand {
-  font-weight: bold;
-  letter-spacing: 0.5px;
+
+/* Navbar styling */
+
+/* Softer, modern navbar */
+.custom-navbar {
+    background-color: #f8f9fa; /* light grey to match your table aesthetic */
+    border-bottom: 1px solid #e2e3e5; /* subtle divider */
+    padding: 0.4rem 1rem; /* slimmer height */
+}
+
+/* Brand styling */
+.custom-navbar .navbar-brand {
+    color: #084298;
+    font-weight: 700; /* bump from 600 to 700 for a stronger identity */
+    font-size: 1.15rem; /* tiny increase to balance the shorter name */
+    letter-spacing: 0.3px; /* subtle spacing for a premium feel */
+}
+
+.custom-navbar .navbar-brand:hover {
+    color: #052c65;
+}
+
+.brand-micro {
+    background: #e9ecef;
+    color: #495057;
+    padding: 1px 4px;       /* much tighter than a normal badge */
+    border-radius: 3px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 4px;       /* small but intentional gap */
+    position: relative;
+    top: -1px;              /* optical alignment */
+}
+
+/* Nav links */
+.custom-navbar .nav-link {
+    color: #495057;
+    padding: 0.5rem 0.75rem;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    border-radius: 4px;
+}
+
+.custom-navbar .nav-link:hover {
+    background-color: #e9ecef;
+    color: #052c65;
+}
+
+/* Welcome text */
+
+.nav-welcome {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem; /* match nav-link spacing */
+    margin: 0; /* remove the old margin-right */
+    color: #6c757d;
+    font-size: 0.95rem;
+    font-weight: 600; /* semibold for emphasis */
+}
+
+.nav-item .nav-welcome {
+    margin-right: 0.25rem; /* subtle spacing */
+}
+
+/* Logout button styling to match nav links */
+.nav-item .logout-btn {
+    padding: 0.5rem 0.75rem; /* matches nav-link */
+}
+
+/* Remove padding from the nav-item containing the form */
+.custom-navbar .nav-item .logout-form {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Make the logout form align like a nav link */
+.logout-form {
+    display: flex !important;
+    align-items: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+}
+
+/* Override Bootstrap nav-link defaults ONLY for the logout button */
+.logout-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    margin: 0 !important;
+    padding: 0.5rem 0.75rem !important;
+
+    height: auto !important;
+    line-height: 1 !important;
+
+    background: transparent !important;
+    border: none !important;
+    color: #495057 !important;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background-color: #e9ecef !important;
+    color: #052c65 !important;
 }
 
 /* Table styling */
 .table {
   background-color: #fff;
   border-radius: 6px;
-  overflow: hidden;
+
+  /* FIX: horizontal scroll */
+  overflow: visible !important;
 }
+
 .table th {
   text-transform: uppercase;
   font-size: 0.9rem;
 }
+
+/* Softer, modern table header */
+.table thead th {
+  background-color: #e9ecef; /* slightly darker, still soft */
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Improved header padding */
+.table thead th {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
 .table td {
   vertical-align: middle;
 }
 
-/* Buttons */
+/* Softer row striping */
+.table-striped > tbody > tr:nth-of-type(odd) {
+  --bs-table-accent-bg: #f8f9fa; /* soft, light grey */
+}
+
+/* Subtle row hover effect */
+.table-hover tbody tr:hover {
+  background-color: #eef2f7; /* soft blue-grey */
+  transition: background-color 0.15s ease;
+}
+
+/* Lighten table borders */
+.table {
+  border-color: #dee2e6; /* lighter outer border */
+}
+
+.table td,
+.table th {
+  border-color: #e5e7eb; /* soft grey for inner borders */
+}
+
+/* Fade-in animation for sorted rows */
+.table tbody.sorted-animate tr {
+    opacity: 0;
+    animation: fadeInRows 0.25s ease forwards;
+}
+
+@keyframes fadeInRows {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Subtle highlight for active sorted column */
+.sorted-column {
+    background-color: rgba(0, 0, 0, 0.03) !important; /* very soft tint */
+    transition: background-color 0.2s ease;
+}
+
+table {
+    width: max-content; /* allow table to grow wider than screen */
+    min-width: 100%;    /* but never shrink smaller than viewport */
+}
+
+table td, table th {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#toggleArrow {
+    display: inline-block;
+    transition: transform 0.25s ease;
+}
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.col-status,
+.col-priority,
+.col-medium,
+.col-subservices,
+.col-actions {
+    min-width: 120px; /* or 140px if you want more */
+}
+
+/* Button styling */
 .btn {
   margin-right: 5px;
 }
+
 .btn-primary {
   background-color: #0069d9;
 }
+
 .btn-warning {
   color: #212529;
+}
+
+.btn-add-game {
+    background-color: #cfe2ff;
+    color: #084298;
+    border: 1px solid #9ec5fe;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+
+.btn-add-game:hover {
+    background-color: #b6d4fe;
+    color: #052c65;
+    border-color: #9ec5fe;
+}
+
+.btn-add-game i {
+    transition: color 0.2s ease;
+    transform: translateY(-1px);
+}
+
+.btn-add-game:hover i {
+    color: #052c65;
+}
+
+#mainFilterToggle {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    color: #495057; /* ensure base text/icon/arrow color */
+}
+
+#mainFilterToggle:hover {
+    background-color: #e9ecef; /* slightly darker grey */
+    border-color: #cfd3d7;
+    color: #495057 !important; /* override Bootstrap's white */
+}
+
+/* Icon + arrow should inherit the same color */
+#mainFilterToggle i,
+#mainFilterToggle .arrow-icon {
+    transition: color 0.2s ease;
+    color: inherit;
+}
+
+#mainFilterToggle:hover i,
+#mainFilterToggle .arrow-icon {
+    color: rgba(73, 80, 87, 0.35); /* match table header arrow */
+    transition: color 0.2s ease;
+}
+
+#mainFilterToggle:hover .arrow-icon {
+    color: rgba(73, 80, 87, 0.55); /* slightly stronger on hover */
+}
+
+.arrow-icon {
+    display: inline-block;
+    transition: transform 0.25s ease;
+}
+.arrow-icon.rotated {
+    transform: rotate(180deg);
+}
+
+.sort-arrow {
+    display: inline-block !important;
+    opacity: 0.35;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+/* When sorted */
+.sort-arrow.active {
+    opacity: 1;
+}
+
+/* Ascending = arrow points up */
+.sort-arrow.asc {
+    transform: rotate(180deg) !important;
+}
+
+/* Descending = arrow points down */
+.sort-arrow.desc {
+    transform: rotate(0deg) !important;
+}
+
+/* Hover effect */
+.sortable:hover .sort-arrow {
+    opacity: 0.7;
 }
 
 /* Form styling */
@@ -50,6 +324,7 @@ form {
   padding: 20px;
   border-radius: 6px;
 }
+
 form button {
   margin-top: 10px;
 }
@@ -70,14 +345,123 @@ form button {
 }
 
 /* Custom badges for statuses */
+
+/* Base badge styling */
 .badge {
   font-size: 0.85rem;
   padding: 0.5em 0.75em;
 }
-.badge-wishlist { background-color: #6c757d; }
-.badge-backlog { background-color: #007bff; }
-.badge-in_progress { background-color: #ffc107; color: #212529; }
-.badge-completed { background-color: #28a745; }
-.badge-paused { background-color: #17a2b8; }
-.badge-shelved { background-color: #343a40; }
-.badge-abandoned { background-color: #dc3545; }
+
+/* Status colours using Bootstrap 5 subtle palette */
+.badge-wishlist {
+  background-color: #e6d8ff; /* soft lavender */
+  color: #4b2e83;            /* deep purple text */
+}
+
+.badge-backlog {
+  background-color: var(--bs-primary-bg-subtle);
+  color: var(--bs-primary-text-emphasis);
+}
+
+.badge-in_progress {
+  background-color: var(--bs-warning-bg-subtle);
+  color: var(--bs-warning-text-emphasis);
+}
+
+.badge-completed {
+  background-color: var(--bs-success-bg-subtle);
+  color: var(--bs-success-text-emphasis);
+}
+
+.badge-paused {
+  background-color: var(--bs-info-bg-subtle);
+  color: var(--bs-info-text-emphasis);
+}
+
+.badge-shelved {
+  background-color: #e2e3e5; /* soft grey */
+  color: #343a40; /* dark grey text */
+}
+
+.badge-abandoned {
+  background-color: var(--bs-danger-bg-subtle);
+  color: var(--bs-danger-text-emphasis);
+}
+
+/* Forms.py Styling */
+
+/* Section headers */
+h5.text-muted {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+/* Checkbox groups */
+
+.form-check-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 0.35rem 1rem;
+}
+
+.form-check-group .form-check {
+    display: flex !important;
+    align-items: center;
+    gap: 0.5rem;
+    width: auto !important;   /* ← THIS is the missing piece */
+}
+
+/* Ensure consistent input heights */
+.form-control,
+.form-select {
+    min-height: 42px;
+}
+
+/* Notes field height */
+textarea.form-control {
+    min-height: 120px;
+}
+
+/* Library form styling */
+
+h5.text-muted {
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.form-check-group .form-check {
+    margin-bottom: 0.35rem;
+}
+
+.form-control,
+.form-select {
+    min-height: 42px;
+}
+
+textarea.form-control {
+    min-height: 120px;
+}
+
+/* Responsive adjustments */
+
+@media (max-width: 576px) {
+    /* Let JS handle hiding/showing columns */
+    .col-game {
+        width: 60%;
+    }
+
+    .col-platform {
+        width: 40%;
+    }
+
+    table {
+        width: max-content !important;
+        min-width: 100% !important;
+    }
+
+    table td,
+    table th {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}

@@ -1,4 +1,4 @@
-# 🎮 Backlog Tracker
+# 🎮 Backlogged.uk
 
 A personal game backlog management system built with **Django**, designed to help users track, organize, and prioritize their gaming library across platforms, editions, mediums, and subscription services.
 
@@ -6,29 +6,30 @@ A personal game backlog management system built with **Django**, designed to hel
 
 ## 📑 Table of Contents
 - [Live Demo](#live-demo)
-- [Overview](#-overview)
-- [Design Decisions](#-design-decisions)
-- [Features](#-features)
-- [Tech Stack](#-tech-stack)
-- [Database Structure](#-database-structure)
+- [Overview](#overview)
+- [Design Decisions](#design-decisions)
+- [Features](#features)
+- [Screenshots](#️screenshots)
+- [Tech Stack](#tech-stack)
+- [Database Structure](#database-structure)
 - [Model Relationship Diagram](#model-relationship-diagram)
 - [System Architecture](#system-architecture)
-- [Why SQLite Is Appropriate for This Project](#-why-sqlite-is-appropriate-for-this-project)
-- [Project Structure](#-project-structure)
+- [Why SQLite Is Appropriate for This Project](#why-sqlite-is-appropriate-for-this-project)
+- [Project Structure](#project-structure)
 - [Template Inheritance Diagram](#template-inheritance-diagram)
-- [Installation](#-installation-local-development)
-- [Upcoming Features](#-upcoming-features)
-- [Known Limitations](#-known-limitations)
-- [Future Architecture Considerations](#-future-architecture-considerations)
-- [Attribution & License](#-attribution--license)
+- [Installation](#installation-local-development)
+- [Upcoming Features](#upcoming-features)
+- [Known Limitations](#known-limitations)
+- [Future Architecture Considerations](#future-architecture-considerations)
+- [Attribution & License](#attribution--license)
 
 ---
 ## 🔗 Live Demo
-[Backlog Tracker](https://backlogged.uk)
+[Backlogged.uk](https://backlogged.uk)
 ---
 
 ## 📌 Overview  
-**Backlog Tracker** is a full-stack web application that allows users to maintain a structured, searchable, and filterable library of games. Whether it is a physical collector's edition or a digital title on a subscription service, this tool helps gamers manage "analysis paralysis" by providing a clean, intuitive interface for their collection.
+**Backloggged.uk** is a full-stack web application that allows users to maintain a structured, searchable, and filterable library of games. Whether it is a physical collector's edition or a digital title on a subscription service, this tool helps gamers manage "analysis paralysis" by providing a clean, intuitive interface for their collection.
 
 The project demonstrates strong backend design, relational modeling, and modern web development practices using the Django framework.
 
@@ -73,6 +74,20 @@ Cloudflare Tunnel provides a secure, zero‑configuration way to expose the loca
 ### 📱 Responsive UI
 * **Mobile-First Design:** Built with **Bootstrap 5** to ensure the library looks great on phones, tablets, and desktops.
 * **Accessible Navigation:** Clean headers and intuitive form layouts.
+
+---
+
+## 🖼️ Screenshots
+
+### Library View
+A clean, sortable, filterable overview of your personal game backlog.
+
+![Library View](tracker/static/screenshots/library_view.png)
+
+### Add Game Form
+A structured form for adding new entries, including platform, edition, status, priority, mediums, and subscription services.
+
+![Add Game Form](tracker/static/screenshots/add_game_form.png)
 
 ---
 

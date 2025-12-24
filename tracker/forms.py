@@ -3,12 +3,16 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Library
+from django.forms.widgets import CheckboxSelectMultiple
 
 # Fixed year range: 1980–2030
 YEAR_CHOICES = [(y, y) for y in range(2030, 1980 - 1, -1)]
 
+class InlineCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
+    template_name = "widgets/inline_checkbox_select.html"
+
 class LibraryForm(forms.ModelForm):
-    # New user-typed fields
+    # User-typed fields
     title = forms.CharField(
         max_length=200,
         label="Game Title",
@@ -41,14 +45,39 @@ class LibraryForm(forms.ModelForm):
             "subscription_services",
         ]
         widgets = {
-            "mediums": forms.CheckboxSelectMultiple(),
-            "subscription_services": forms.CheckboxSelectMultiple(),
+            "mediums": InlineCheckboxSelectMultiple(),
+            "subscription_services": InlineCheckboxSelectMultiple(),
         }
         labels = {
             "mediums": "Medium",
             "subscription_services": "Subscription Services",
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Apply Bootstrap classes to all fields
+        for name, field in self.fields.items():
+            widget = field.widget
+
+            # Multi-checkbox fields
+            if isinstance(widget, forms.CheckboxSelectMultiple):
+                widget.attrs.update({"class": "form-check"})
+                continue
+
+            # Dropdowns
+            if isinstance(widget, forms.Select):
+                widget.attrs.update({"class": "form-select"})
+                continue
+
+            # Everything else (text, number, date, textarea)
+            widget.attrs.update({"class": "form-control"})
+
+                    # Add HTML limits for priority
+            self.fields["priority"].widget.attrs.update({
+                "min": 1,
+                "max": 10
+            })
 
 # Registration Form
 
@@ -58,3 +87,8 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ["username", "email", "password1", "password2"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs.update({"class": "form-control"})

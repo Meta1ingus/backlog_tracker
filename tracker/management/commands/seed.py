@@ -1,11 +1,13 @@
 import random
 from datetime import date
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.contrib.auth.models import User
 from tracker.models import (
     Game, Edition, Platform, Status,
     Medium, SubscriptionService, Library
 )
+
 
 class Command(BaseCommand):
     help = "Seed the database with test data for development"
@@ -41,14 +43,31 @@ class Command(BaseCommand):
 
         # --- PLATFORMS ---
         platforms = [
+            # Consoles
+            ("PlayStation 5", "Sony", "Console"),
+            ("PlayStation 4", "Sony", "Console"),
+            ("PlayStation 3", "Sony", "Console"),
+            ("Xbox Series X|S", "Microsoft", "Console"),
+            ("Xbox One", "Microsoft", "Console"),
+            ("Xbox 360", "Microsoft", "Console"),
+            ("Nintendo Switch", "Nintendo", "Console"),
+            ("Wii U", "Nintendo", "Console"),
+            ("Wii", "Nintendo", "Console"),
+
+            # Handhelds
+            ("Nintendo 3DS", "Nintendo", "Handheld"),
+            ("Nintendo DS", "Nintendo", "Handheld"),
+            ("PlayStation Vita", "Sony", "Handheld"),
+            ("PSP", "Sony", "Handheld"),
+
+            # PC / Other
             ("PC", "Various", "PC"),
-            ("PS5", "Sony", "Console"),
-            ("Xbox Series", "Microsoft", "Console"),
-            ("Switch", "Nintendo", "Console"),
-            ("Steam", "Valve", "Service"),
-            ("GOG", "CD Projekt", "Service"),
-            ("Epic", "Epic Games", "Service"),
+            ("Mac", "Apple", "PC"),
+            ("Linux", "Various", "PC"),
+            ("Steam Deck", "Valve", "PC"),
+            ("Steam Machine", "Valve", "PC"),
         ]
+
         platform_objs = []
         for name, manufacturer, type in platforms:
             obj, _ = Platform.objects.get_or_create(
@@ -57,84 +76,103 @@ class Command(BaseCommand):
             platform_objs.append(obj)
 
         # --- MEDIUMS ---
-        mediums = ["Digital", "Physical", "Cloud", "Subscription", "Emulated"]
+        mediums = [
+            "Digital",
+            "Disc",
+            "Cartridge",
+            "Cloud Streaming",
+            "Emulator",
+        ]
+
         medium_objs = []
         for name in mediums:
             obj, _ = Medium.objects.get_or_create(name=name)
             medium_objs.append(obj)
 
         # --- SUBSCRIPTION SERVICES ---
-        services = ["Game Pass", "PS Plus", "Nintendo Online", "EA Play", "Ubisoft+"]
+        services = [
+            "Xbox Game Pass",
+            "PlayStation Plus",
+            "Nintendo Switch Online",
+            "EA Play",
+            "Ubisoft+",
+            "GeForce NOW",
+            "Amazon Luna",
+        ]
+
         service_objs = []
         for name in services:
             obj, _ = SubscriptionService.objects.get_or_create(name=name)
             service_objs.append(obj)
 
-        # --- GAMES + EDITIONS ---
-        game_titles = [
-            "Elden Ring", "Baldur's Gate 3", "Hades II", "Cyberpunk 2077",
-            "The Witcher 3", "Stardew Valley", "Hollow Knight",
-            "God of War Ragnarok", "Starfield", "Alan Wake 2",
-            "Persona 5 Royal", "Death Stranding", "Returnal",
-            "Ghost of Tsushima", "Bloodborne", "Dark Souls III",
-            "Final Fantasy VII Remake", "Monster Hunter World",
-            "Sekiro", "Control"
-        ]
+        # --- DEVELOPMENT-ONLY GAME SEEDING ---
+        if settings.DEBUG:
+            self.stdout.write("DEBUG mode detected — seeding demo games...")
 
-        edition_objs = []
+            game_titles = [
+                "Elden Ring", "Baldur's Gate 3", "Hades II", "Cyberpunk 2077",
+                "The Witcher 3", "Stardew Valley", "Hollow Knight",
+                "God of War Ragnarok", "Starfield", "Alan Wake 2",
+                "Persona 5 Royal", "Death Stranding", "Returnal",
+                "Ghost of Tsushima", "Bloodborne", "Dark Souls III",
+                "Final Fantasy VII Remake", "Monster Hunter World",
+                "Sekiro", "Control"
+            ]
 
-        for title in game_titles:
-            game, _ = Game.objects.get_or_create(
-                title=title,
-                defaults={
-                    "release_year": random.randint(2000, 2024),
-                    "developer": "",
-                    "publisher": "",
-                }
-            )
+            edition_objs = []
 
-            # Create 1–2 editions per game
-            for edition_name in ["Standard Edition", "Deluxe Edition"][:random.randint(1, 2)]:
-                edition, _ = Edition.objects.get_or_create(
-                    game=game,
-                    name=edition_name,
+            for title in game_titles:
+                game, _ = Game.objects.get_or_create(
+                    title=title,
                     defaults={
-                        "region": random.choice(["EU", "US", "JP", "Global"]),
-                        "release_date": date(
-                            random.randint(2000, 2024),
-                            random.randint(1, 12),
-                            random.randint(1, 28)
-                        ),
+                        "release_year": random.randint(2000, 2024),
+                        "developer": "",
+                        "publisher": "",
                     }
                 )
-                # Assign platforms to edition
-                edition.platforms.set(random.sample(platform_objs, random.randint(1, 2)))
-                edition_objs.append(edition)
 
-        # --- LIBRARY ENTRIES ---
-        for edition in edition_objs:
-            Library.objects.get_or_create(
-                user=user,
-                edition=edition,
-                platform=random.choice(list(edition.platforms.all())),
-                status=random.choice(status_objs),
-                defaults={
-                    "priority": random.randint(1, 10),
-                    "hours_played": random.uniform(0, 200),
-                    "notes": "",
-                    "start_date": None,
-                    "finish_date": None,
-                }
-            )
+                # Create 1–2 editions per game
+                for edition_name in ["Standard Edition", "Deluxe Edition"][:random.randint(1, 2)]:
+                    edition, _ = Edition.objects.get_or_create(
+                        game=game,
+                        name=edition_name,
+                        defaults={
+                            "region": random.choice(["EU", "US", "JP", "Global"]),
+                            "release_date": date(
+                                random.randint(2000, 2024),
+                                random.randint(1, 12),
+                                random.randint(1, 28)
+                            ),
+                        }
+                    )
+                    edition.platforms.set(random.sample(platform_objs, random.randint(1, 2)))
+                    edition_objs.append(edition)
 
-            # Add mediums
-            lib = Library.objects.get(user=user, edition=edition)
-            lib.mediums.set(random.sample(medium_objs, random.randint(1, 2)))
-
-            # Add subscription services (40% chance)
-            if random.random() < 0.4:
-                lib.subscription_services.set(
-                    random.sample(service_objs, random.randint(1, 2))
+            # --- LIBRARY ENTRIES ---
+            for edition in edition_objs:
+                Library.objects.get_or_create(
+                    user=user,
+                    edition=edition,
+                    platform=random.choice(list(edition.platforms.all())),
+                    status=random.choice(status_objs),
+                    defaults={
+                        "priority": random.randint(1, 10),
+                        "hours_played": random.uniform(0, 200),
+                        "notes": "",
+                        "start_date": None,
+                        "finish_date": None,
+                    }
                 )
+
+                lib = Library.objects.get(user=user, edition=edition)
+                lib.mediums.set(random.sample(medium_objs, random.randint(1, 2)))
+
+                if random.random() < 0.4:
+                    lib.subscription_services.set(
+                        random.sample(service_objs, random.randint(1, 2))
+                    )
+
+        else:
+            self.stdout.write("Production mode — skipping demo game seeding.")
 
         self.stdout.write(self.style.SUCCESS("Database seeded successfully!"))

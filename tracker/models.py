@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 class Platform(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -70,7 +71,13 @@ class Library(models.Model):
     edition = models.ForeignKey(Edition, on_delete=models.CASCADE)
     platform = models.ForeignKey(Platform, on_delete=models.CASCADE)
     status = models.ForeignKey(Status, on_delete=models.CASCADE)
-    priority = models.IntegerField(default=5)
+    priority = models.IntegerField(
+    default=5,
+    validators=[
+        MinValueValidator(1),
+        MaxValueValidator(10)
+                ]
+    )
     hours_played = models.FloatField(default=0)
     notes = models.TextField(blank=True)
     start_date = models.DateField(null=True, blank=True)

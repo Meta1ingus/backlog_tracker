@@ -1,77 +1,90 @@
 {% extends "base.html" %}
 {% block content %}
-<h1>{{ view.action|default:"Add/Edit Library Entry" }}</h1>
 
-<form method="post">
-    {% csrf_token %}
+<div class="container mt-4 mb-5">
+    <h2 class="mb-4">{{ view.action|default:"Add Game" }}</h2>
 
-    <!-- Game Title -->
-    <div class="form-section">
-        <label for="{{ form.title.id_for_label }}">Game Title</label>
-        {{ form.title }}
-    </div>
+    <form method="post" novalidate>
+        {% csrf_token %}
 
-    <!-- Edition Name -->
-    <div class="form-section">
-        <label for="{{ form.edition_name.id_for_label }}">Edition Name</label>
-        {{ form.edition_name }}
-    </div>
+        <!-- GAME DETAILS -->
+        <h5 class="text-muted mt-4 mb-3">Game Details</h5>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">{{ form.title.label }}</label>
+                {{ form.title }}
+            </div>
 
-    <!-- Release Year -->
-    <div class="form-section">
-        <label for="{{ form.year.id_for_label }}">Release Year</label>
-        {{ form.year }}
-    </div>
+            <div class="col-md-6">
+                <label class="form-label">{{ form.year.label }}</label>
+                {{ form.year }}
+            </div>
+        </div>
 
-    <div class="form-section">
-        <label for="{{ form.platform.id_for_label }}">Platform</label>
-        {{ form.platform }}
-    </div>
+        <!-- EDITION DETAILS -->
+        <h5 class="text-muted mt-4 mb-3">Edition Details</h5>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">{{ form.edition_name.label }}</label>
+                {{ form.edition_name }}
+            </div>
+        </div>
 
-    <div class="form-section">
-        <label for="{{ form.status.id_for_label }}">Status</label>
-        {{ form.status }}
-    </div>
+        <!-- YOUR COPY -->
+        <h5 class="text-muted mt-4 mb-3">Your Copy</h5>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">{{ form.platform.label }}</label>
+                {{ form.platform }}
+            </div>
 
-    <div class="form-section">
-        <label for="{{ form.priority.id_for_label }}">Priority</label>
-        {{ form.priority }}
-    </div>
+            <div class="col-md-6">
+                <label class="form-label">{{ form.status.label }}</label>
+                {{ form.status }}
+            </div>
 
-    <div class="form-section">
-        <label for="{{ form.hours_played.id_for_label }}">Hours Played</label>
-        {{ form.hours_played }}
-    </div>
+            <div class="col-md-6">
+                <label class="form-label">{{ form.priority.label }}</label>
+                {{ form.priority }}
+            </div>
 
-    <div class="form-section">
-        <label for="{{ form.notes.id_for_label }}">Notes</label>
-        {{ form.notes }}
-    </div>
+            <div class="col-md-6">
+                <label class="form-label">{{ form.hours_played.label }}</label>
+                {{ form.hours_played }}
+            </div>
 
-    <div class="form-section">
-        <label for="{{ form.start_date.id_for_label }}">Start Date</label>
-        {{ form.start_date }}
-    </div>
+            <div class="col-md-12">
+                <label class="form-label">{{ form.notes.label }}</label>
+                {{ form.notes }}
+            </div>
 
-    <div class="form-section">
-        <label for="{{ form.finish_date.id_for_label }}">Finish Date</label>
-        {{ form.finish_date }}
-    </div>
+            <div class="col-md-6">
+                <label class="form-label">{{ form.start_date.label }}</label>
+                {{ form.start_date }}
+            </div>
 
-    <hr>
+            <div class="col-md-6">
+                <label class="form-label">{{ form.finish_date.label }}</label>
+                {{ form.finish_date }}
+            </div>
+        </div>
 
-    <h3>Medium</h3>
-    <div class="checkbox-group">
-        {{ form.mediums }}
-    </div>
+        <!-- MEDIUMS -->
+        <h5 class="text-muted mt-4 mb-2">Medium</h5>
+        <div class="form-check-group mb-3">
+            {{ form.mediums }}
+        </div>
 
-    <h3>Subscription Services</h3>
-    <div class="checkbox-group">
-        {{ form.subscription_services }}
-    </div>
+        <!-- SUBSCRIPTION SERVICES -->
+        <h5 class="text-muted mt-4 mb-2">Subscription Services</h5>
+        <div class="form-check-group mb-4">
+            {{ form.subscription_services }}
+        </div>
 
-    <button type="submit" class="btn btn-success">Save</button>
-</form>
+        <!-- SUBMIT -->
+        <button type="submit" class="btn btn-primary px-4">Save Game</button>
+    </form>
+</div>
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -86,4 +99,5 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>
+
 {% endblock %}
