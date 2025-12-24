@@ -26,6 +26,14 @@ A personal game backlog management system built with **Django**, designed to hel
 ---
 ## 🔗 Live Demo
 [Backlogged.uk](https://backlogged.uk)
+## 🔐 Demo Login (for assessment)
+
+Use the following credentials to access the pre‑seeded demo account:
+
+**Username:** `martyn`  
+**Password:** `password123`
+
+This account contains pre‑seeded demo data to showcase the system’s features.
 ---
 
 ## 📌 Overview  
