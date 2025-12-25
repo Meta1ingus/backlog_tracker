@@ -26,6 +26,7 @@ def register(request):
 
     return render(request, "tracker/register.html", {"form": form})
 
+
 # Library Views
 
 class LibraryListView(LoginRequiredMixin, ListView):
@@ -150,6 +151,7 @@ class LibraryListView(LoginRequiredMixin, ListView):
 
         return context
 
+
 class LibraryCreateView(LoginRequiredMixin, CreateView):
     model = Library
     form_class = LibraryForm
@@ -160,23 +162,28 @@ class LibraryCreateView(LoginRequiredMixin, CreateView):
         # Extract user input
         title = form.cleaned_data["title"]
         edition_name = form.cleaned_data["edition_name"] or "Standard"
-        year = int(form.cleaned_data["year"])
+        release_date = form.cleaned_data["release_date"]
 
         # Create or get the Game
         game, _ = Game.objects.get_or_create(title=title)
 
         # Create or get the Edition
-        edition, _ = Edition.objects.get_or_create(
+        edition, created = Edition.objects.get_or_create(
             game=game,
             name=edition_name,
-            year=year
         )
+
+        # If newly created, set release_date
+        if created:
+            edition.release_date = release_date
+            edition.save()
 
         # Attach Edition + User to the Library entry
         form.instance.edition = edition
         form.instance.user = self.request.user
 
         return super().form_valid(form)
+
 
 class LibraryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Library
@@ -188,13 +195,13 @@ class LibraryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         initial = super().get_initial()
         edition = self.object.edition
 
-    # Pre-fill the form fields
+        # Pre-fill the form fields
         initial["title"] = edition.game.title
         initial["edition_name"] = edition.name
 
-    # Extract year from release_date if available
+        # Extract year from release_date if available
         if edition.release_date:
-            initial["year"] = edition.release_date.year
+            initial["release_date"] = edition.release_date
 
         return initial
 
@@ -202,17 +209,21 @@ class LibraryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         # Extract user input
         title = form.cleaned_data["title"]
         edition_name = form.cleaned_data["edition_name"] or "Standard"
-        year = int(form.cleaned_data["year"])
+        release_date = form.cleaned_data["release_date"]
 
         # Create or get the Game
         game, _ = Game.objects.get_or_create(title=title)
 
         # Create or get the Edition
-        edition, _ = Edition.objects.get_or_create(
+        edition, created = Edition.objects.get_or_create(
             game=game,
             name=edition_name,
-            year=year
         )
+
+        # Update release_date if needed
+        if created:
+            edition.release_date = release_date
+            edition.save()
 
         # Attach Edition + User to the Library entry
         form.instance.edition = edition
@@ -222,6 +233,7 @@ class LibraryUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     def test_func(self):
         return self.get_object().user == self.request.user
+
 
 class LibraryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Library

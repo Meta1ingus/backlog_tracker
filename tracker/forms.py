@@ -1,15 +1,13 @@
-# forms.py
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Library
 from django.forms.widgets import CheckboxSelectMultiple
 
-# Fixed year range: 1980–2030
-YEAR_CHOICES = [(y, y) for y in range(2030, 1980 - 1, -1)]
 
 class InlineCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
     template_name = "widgets/inline_checkbox_select.html"
+
 
 class LibraryForm(forms.ModelForm):
     # User-typed fields
@@ -25,10 +23,11 @@ class LibraryForm(forms.ModelForm):
         required=False  # Blank becomes "Standard"
     )
 
-    year = forms.ChoiceField(
-        choices=YEAR_CHOICES,
-        label="Release Year",
-        required=True
+    # NEW: Replace year with a real release_date field
+    release_date = forms.DateField(
+        required=False,
+        label="Release Date",
+        widget=forms.DateInput(attrs={"type": "date"})
     )
 
     class Meta:
@@ -47,6 +46,8 @@ class LibraryForm(forms.ModelForm):
         widgets = {
             "mediums": InlineCheckboxSelectMultiple(),
             "subscription_services": InlineCheckboxSelectMultiple(),
+            "start_date": forms.DateInput(attrs={"type": "date"}),
+            "finish_date": forms.DateInput(attrs={"type": "date"}),
         }
         labels = {
             "mediums": "Medium",
@@ -73,11 +74,12 @@ class LibraryForm(forms.ModelForm):
             # Everything else (text, number, date, textarea)
             widget.attrs.update({"class": "form-control"})
 
-                    # Add HTML limits for priority
-            self.fields["priority"].widget.attrs.update({
-                "min": 1,
-                "max": 10
-            })
+        # Add HTML limits for priority
+        self.fields["priority"].widget.attrs.update({
+            "min": 1,
+            "max": 10
+        })
+
 
 # Registration Form
 

@@ -16,8 +16,8 @@
             </div>
 
             <div class="col-md-6">
-                <label class="form-label">{{ form.year.label }}</label>
-                {{ form.year }}
+                <label class="form-label">{{ form.release_date.label }}</label>
+                {{ form.release_date }}
             </div>
         </div>
 
@@ -88,15 +88,12 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", function() {
-    new TomSelect("#id_year", {
-        maxOptions: 200,
-        create: false
-    });
 
     new TomSelect("#id_platform", {
         maxOptions: 200,
         create: false
     });
+
 });
 </script>
 
