@@ -126,7 +126,7 @@ STATIC_URL = 'static/'
 
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "library_list"
-LOGOUT_REDIRECT_URL = "login"
+LOGOUT_REDIRECT_URL = "home"
 
 LOGGING = {
     "version": 1,

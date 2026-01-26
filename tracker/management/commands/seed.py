@@ -16,15 +16,12 @@ class Command(BaseCommand):
         self.stdout.write("Seeding database...")
 
         # --- USER ---
-        if not User.objects.exists():
-            user = User.objects.create_user(
-                username="martyn",
-                password="password123",
-                email="martyn@example.com"
-            )
-            self.stdout.write("Created default user: martyn / password123")
-        else:
-            user = User.objects.first()
+        try:
+            user = User.objects.get(username="meta1ingus")
+            self.stdout.write("Using existing user: meta1ingus")
+        except User.DoesNotExist:
+            self.stdout.write("ERROR: User 'meta1ingus' does not exist. Please create it first.")
+            return
 
         # --- STATUSES ---
         statuses = [
