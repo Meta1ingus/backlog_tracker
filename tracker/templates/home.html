@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container py-5">
+
+    <!-- Hero -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">
+  Backlogged<span class="brand-micro">.uk</span>
+        </h1>
+        <p class="lead text-muted">A smarter way to track the games you love.</p>
+
+        <div class="mt-4">
+            <a href="#" class="btn btn-primary btn-lg me-2" data-bs-toggle="modal" data-bs-target="#loginModal">Log In</a>
+            <a href="{% url 'register' %}" class="btn btn-outline-secondary btn-lg">Register</a>
+        </div>
+    </div>
+
+    <!-- Features -->
+    <div class="row text-center mb-5">
+        <div class="col-md-4 mb-4">
+            <h3 class="fw-semibold">🎮 Track Your Library</h3>
+            <p class="text-muted">Keep a clean, sortable list of everything you’re playing, finished, or planning.</p>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <h3 class="fw-semibold">⭐ Prioritise What Matters</h3>
+            <p class="text-muted">Use custom priorities, filters, and sorting to stay focused.</p>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <h3 class="fw-semibold">📊 See Your Progress</h3>
+            <p class="text-muted">Visualise your backlog over time with stats and insights.</p>
+        </div>
+    </div>
+
+    <!-- Placeholder for future screenshot -->
+    <div class="text-center">
+        <div class="border rounded p-5 bg-light text-muted">
+            Future screenshot or demo preview goes here
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

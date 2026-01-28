@@ -1,5 +1,5 @@
 from multiprocessing import context
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
@@ -243,3 +243,6 @@ class LibraryDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         library = self.get_object()
         return library.user == self.request.user
+    
+class HomeView(TemplateView):
+    template_name = "home.html"
