@@ -29,11 +29,22 @@ SECRET_KEY = "9a5@s-@*cww%=249fyki^j$r7a_hf!^np=11=70#ga6j^g5n2e"
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "127.0.0.1",
+    "backlogged.uk",
+    "www.backlogged.uk",
     "localhost",
-    "100.0.0.0/8",
-    "192.168.1.31",
+    "127.0.0.1",
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://backlogged.uk",
+    "https://www.backlogged.uk",
+]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+SESSION_COOKIE_SECURE = False
+
+CSRF_COOKIE_SECURE = False
 
 # Application definition
 
@@ -123,6 +134,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 LOGIN_URL = "login"
 LOGIN_REDIRECT_URL = "library_list"
