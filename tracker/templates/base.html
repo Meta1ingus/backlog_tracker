@@ -1,11 +1,12 @@
 {% load static %}
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Backlogged.uk</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta charset="utf-8">
-  
+
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
   <!-- Bootstrap Icons -->
@@ -16,65 +17,122 @@
   <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
 </head>
 
-<!-- Login Modal -->
-<div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-
-      <div class="modal-header">
-        <h5 class="modal-title">Log In</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-
-      <div class="modal-body">
-        <form method="POST" action="{% url 'login' %}">
-          {% csrf_token %}
-
-          <!-- Username -->
-          <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input type="text" name="username" class="form-control" required>
-          </div>
-
-          <!-- Password -->
-          <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control" required>
-          </div>
-
-          <div class="text-end mt-2">
-            <a href="{% url 'password_reset' %}">Forgot your password?</a>
-          </div>
-
-          <button type="submit" class="btn btn-primary w-100 mt-2">
-            Log In
-          </button>
-        </form>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- FIX: removed .container from body -->
 <body class="py-4">
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg custom-navbar mb-4">
+  <!-- Login Modal -->
+  <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
 
-  <a class="navbar-brand" href="/">
-    Backlogged<span class="brand-micro">.uk</span>
-  </a>
+        <div class="modal-header">
+          <h5 class="modal-title">Log In</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
 
-  <!-- Toggler button -->
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
+        <div class="modal-body">
+          <form method="POST" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <!-- Username -->
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input type="text" name="username" class="form-control" required>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+              <label class="form-label">Password</label>
+              <input type="password" name="password" class="form-control" required>
+            </div>
+
+            <div class="text-end mt-2">
+              <a href="{% url 'password_reset' %}">Forgot your password?</a>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-2">
+              Log In
+            </button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Feedback Modal -->
+  <div class="modal fade" id="feedbackModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <h5 class="modal-title">Send Feedback</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+          <form id="feedbackForm">
+            {% csrf_token %}
+
+            <input type="text" name="honeypot" class="d-none">
+
+            <div class="mb-3">
+              <label class="form-label">Your Name (optional)</label>
+              <input type="text" name="name" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Your Email (optional)</label>
+              <input type="email" name="email" class="form-control">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Priority</label>
+              <select name="priority" class="form-select">
+                <option value="normal" selected>Normal</option>
+                <option value="low">Low</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Your Feedback</label>
+              <textarea name="message" id="feedbackMessage" rows="4" class="form-control" maxlength="500"
+                required></textarea>
+              <div class="form-text text-end">
+                <span id="messageCount">0</span>/500
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+              Send Feedback
+            </button>
+          </form>
+
+          <div id="feedbackSuccess" class="alert alert-success mt-3 d-none">
+            Thank you — your feedback has been sent.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg custom-navbar mb-4">
+
+    <a class="navbar-brand" href="/">
+      Backlogged<span class="brand-micro">.uk</span>
+    </a>
+
+    <!-- Toggler button -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar">
       <span class="navbar-toggler-icon"></span>
-  </button>
+    </button>
 
-  <div class="collapse navbar-collapse" id="mainNavbar">
-    <ul class="navbar-nav ms-auto align-items-center">
+    <div class="collapse navbar-collapse" id="mainNavbar">
+      <ul class="navbar-nav ms-auto align-items-center">
 
-      {% if user.is_authenticated %}
+        {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'library_add' %}">Add New Game</a>
         </li>
@@ -96,7 +154,7 @@
           </form>
         </li>
 
-      {% else %}
+        {% else %}
         <li class="nav-item">
           <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Login</a>
         </li>
@@ -104,21 +162,110 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'register' %}">Register</a>
         </li>
-      {% endif %}
+        {% endif %}
 
-    </ul>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="container">
+    {% block content %}{% endblock %}
   </div>
-</nav>
 
-<!-- FIX: wrap page content in its own container -->
-<div class="container">
-  {% block content %}{% endblock %}
-</div>
+  <!-- Footer -->
+  <footer class="mt-5 py-3 border-top text-center text-muted small">
+    <span>Backlogged.uk</span>
+    <span class="mx-2">·</span>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#feedbackModal">
+      Send feedback
+    </a>
+    {% if user.is_staff %}
+    <a href="{% url 'feedback_dashboard' %}" class="text-muted small">
+      Feedback Dashboard
+    </a>
+    {% endif %}
+  </footer>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Tom Select JS -->
-<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Tom Select JS -->
+  <script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+
+  <!-- Feedback AJAX -->
+  <script>
+    document.getElementById("feedbackForm").addEventListener("submit", async function (e) {
+      e.preventDefault();
+
+      const form = e.target;
+      const formData = new FormData(form);
+
+      const response = await fetch("{% url 'submit_feedback' %}", {
+        method: "POST",
+        headers: {
+          "X-CSRFToken": formData.get("csrfmiddlewaretoken")
+        },
+        body: formData
+      });
+
+      if (response.ok) {
+        form.classList.add("d-none");
+        document.getElementById("feedbackSuccess").classList.remove("d-none");
+
+        // Show toast after modal closes
+        const toastEl = document.getElementById("feedbackToast");
+        const toast = new bootstrap.Toast(toastEl);
+
+        // Wait for modal to fully close before showing toast
+        const modalEl = document.getElementById("feedbackModal");
+        modalEl.addEventListener('hidden.bs.modal', () => {
+          toast.show();
+        }, {
+          once: true
+        });
+      }
+    });
+  </script>
+
+  <script>
+    const feedbackModal = document.getElementById('feedbackModal');
+
+    feedbackModal.addEventListener('hidden.bs.modal', function () {
+      const form = document.getElementById("feedbackForm");
+      const success = document.getElementById("feedbackSuccess");
+      const messageCount = document.getElementById("messageCount");
+
+      form.reset();
+      form.classList.remove("d-none");
+      success.classList.add("d-none");
+
+      // Reset character counter
+      messageCount.textContent = "0";
+    });
+  </script>
+
+  <script>
+    const messageInput = document.getElementById("feedbackMessage");
+    const messageCount = document.getElementById("messageCount");
+
+    messageInput.addEventListener("input", () => {
+      messageCount.textContent = messageInput.value.length;
+    });
+  </script>
+
+  <!-- Toast Notification -->
+  <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 1100">
+    <div id="feedbackToast" class="toast align-items-center text-bg-success border-0" role="alert"
+      data-bs-autohide="true" data-bs-delay="3000">
+      <div class="d-flex">
+        <div class="toast-body">
+          Feedback Successfully Submitted
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+      </div>
+    </div>
+  </div>
 
 </body>
+
 </html>
